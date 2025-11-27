@@ -37,10 +37,14 @@ wheels/
 *.swo
 *~
 
-# Data
-data/*.parquet
-data/*.csv
+# Data and workspace
+workspace/
+CHANGES_SUMMARY.md
+QUICK_REFERENCE.md
+QUICK_TEST.md
+data/
 *.parquet
+*.csv
 
 # Analysis results
 analysis_result.html

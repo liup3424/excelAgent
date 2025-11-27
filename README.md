@@ -14,7 +14,10 @@ An intelligent Excel analysis agent that understands natural language questions,
 
 ```
 excelAgent/
-├── excelExample/          # Input Excel files
+├── workspace/             # Uploaded Excel files and processed data
+│   ├── uploads/          # Excel files uploaded via UI
+│   ├── data/             # Preprocessed normalized tables
+│   └── charts/           # Generated charts
 ├── src/
 │   ├── preprocessing/      # Excel preprocessing pipeline
 │   ├── nlp/               # Natural language understanding
@@ -63,15 +66,47 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## Usage
+## Quick Start
 
-Make sure the virtual environment is activated, then:
+### 1. Activate Virtual Environment
 
 ```bash
-# CLI mode
-python main.py --mode cli
+source venv/bin/activate
+```
 
-# WebSocket mode
+### 2. Start the Gradio UI (Recommended)
+
+```bash
+python app_gradio.py
+```
+
+Then open your browser to: **http://localhost:7860**
+
+### 3. Use the App
+
+1. **Upload Excel files** via the UI
+2. **Ask questions** in Chinese or English (e.g., "列出所有数据" or "Show all data")
+3. **View results** in the tabs (Code, Tables, Charts, Summary, Lineage)
+
+## 📖 Complete Usage Guide
+
+See **[HOW_TO_USE.md](HOW_TO_USE.md)** for:
+- Step-by-step instructions
+- Example questions (Chinese & English)
+- Troubleshooting guide
+- Advanced usage
+
+## Alternative Modes
+
+### CLI Mode
+
+```bash
+python main.py --mode cli
+```
+
+### WebSocket Mode
+
+```bash
 python main.py --mode websocket
 ```
 

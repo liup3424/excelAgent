@@ -11,7 +11,7 @@ import pandas as pd
 class FileManager:
     """Manages Excel files in the knowledge base"""
     
-    def __init__(self, excel_dir: str = "excelExample"):
+    def __init__(self, excel_dir: str):
         """
         Initialize file manager
         
@@ -20,7 +20,8 @@ class FileManager:
         """
         self.excel_dir = Path(excel_dir)
         if not self.excel_dir.exists():
-            raise ValueError(f"Excel directory not found: {excel_dir}")
+            # Create directory if it doesn't exist (for uploads)
+            self.excel_dir.mkdir(parents=True, exist_ok=True)
     
     def list_excel_files(self) -> List[Path]:
         """List all Excel files in the directory"""

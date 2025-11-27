@@ -19,8 +19,8 @@ def main():
     )
     parser.add_argument(
         "--excel-dir",
-        default="excelExample",
-        help="Directory containing Excel files"
+        default=None,
+        help="Directory containing Excel files (optional, files can be uploaded via UI)"
     )
     parser.add_argument(
         "--host",

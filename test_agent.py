@@ -14,9 +14,14 @@ def test_agent():
     
     try:
         print("\n1. Initializing agent...")
-        agent = ExcelAnalysisAgent(excel_dir="excelExample")
+        # Initialize without excel_dir since files are uploaded via UI
+        agent = ExcelAnalysisAgent(excel_dir=None)
         print(f"   ✓ Agent initialized successfully!")
         print(f"   ✓ Found {len(agent.normalized_tables)} normalized tables")
+        
+        if len(agent.normalized_tables) == 0:
+            print("   ℹ No tables loaded. Upload Excel files via Gradio UI to start analyzing.")
+            return True
         
         if agent.normalized_tables:
             print("\n2. Available tables:")

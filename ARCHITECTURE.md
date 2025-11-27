@@ -174,8 +174,10 @@ User Question → IntentExtractor → ColumnMapper → CodeGenerator → CodeExe
 
 ```
 excelAgent/
-├── excelExample/          # Input Excel files
-├── data/                  # Preprocessed normalized tables (Parquet)
+├── workspace/             # Uploaded files and processed data
+│   ├── uploads/          # Excel files uploaded via UI
+│   ├── data/             # Preprocessed normalized tables (Parquet)
+│   └── charts/           # Generated charts
 ├── src/
 │   ├── preprocessing/     # Excel preprocessing pipeline
 │   ├── nlp/              # Natural language understanding

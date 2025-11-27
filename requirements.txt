@@ -11,6 +11,7 @@ anthropic>=0.18.0
 # Visualization
 matplotlib>=3.7.0
 plotly>=5.17.0
+kaleido>=0.2.1  # Required for plotly image export (PNG)
 seaborn>=0.12.0
 
 # WebSocket and web server
@@ -18,6 +19,10 @@ fastapi>=0.104.0
 uvicorn>=0.24.0
 websockets>=12.0
 python-multipart>=0.0.6
+
+# Gradio UI
+gradio==4.20.0  # Pin to stable version (4.44.1 has JSON schema parsing bug)
+huggingface-hub<0.20  # Required for Gradio compatibility
 
 # Audio processing (for voice input)
 # Note: pyaudio may require system dependencies (portaudio)

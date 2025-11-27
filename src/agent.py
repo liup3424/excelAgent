@@ -17,12 +17,12 @@ from .lineage import LineageTracker
 class ExcelAnalysisAgent:
     """Main agent that orchestrates the entire analysis pipeline"""
     
-    def __init__(self, excel_dir: str = "excelExample", data_dir: str = "data"):
+    def __init__(self, excel_dir: Optional[str] = None, data_dir: str = "data"):
         """
         Initialize the analysis agent
         
         Args:
-            excel_dir: Directory containing Excel files
+            excel_dir: Optional directory containing Excel files (if None, no preprocessing on init)
             data_dir: Directory to store preprocessed tables
         """
         self.excel_dir = excel_dir
@@ -30,25 +30,38 @@ class ExcelAnalysisAgent:
         self.data_dir.mkdir(exist_ok=True)
         
         # Initialize components
-        self.file_manager = FileManager(excel_dir)
+        self.file_manager = None  # Will be created when needed
+        if excel_dir:
+            self.file_manager = FileManager(excel_dir)
         self.unmerge_processor = None  # Will be created per file
         self.header_analyzer = HeaderAnalyzer()
         self.table_normalizer = TableNormalizer()
         self.intent_extractor = IntentExtractor()
         self.column_mapper = ColumnMapper()
-        self.code_generator = CodeGenerator()
+        self.code_generator = CodeGenerator(llm_client=None)  # Will auto-initialize OpenAI if API key available
         self.code_executor = CodeExecutor()
         self.lineage_tracker = LineageTracker()
         
         # Cache for normalized tables
         self.normalized_tables: List[Dict] = []
-        self._preprocess_all_files()
+        
+        # Only preprocess if excel_dir is provided
+        if excel_dir:
+            self._preprocess_all_files()
     
     def _preprocess_all_files(self):
         """Preprocess all Excel files and create normalized tables"""
+        if not self.file_manager:
+            print("No file manager initialized. Skipping preprocessing.")
+            return
+        
         print("Preprocessing Excel files...")
         
         excel_files = self.file_manager.list_excel_files()
+        
+        if not excel_files:
+            print("No Excel files found in the directory.")
+            return
         
         for file_path in excel_files:
             print(f"\nProcessing: {file_path.name}")
@@ -124,6 +137,16 @@ class ExcelAnalysisAgent:
         print(f"\n{'='*60}")
         print(f"Analyzing question: {question}")
         print(f"{'='*60}\n")
+        
+        # Check if we have any tables
+        if not self.normalized_tables:
+            return {
+                "success": False,
+                "error": "No Excel files have been uploaded. Please upload files first.",
+                "code": None,
+                "execution_result": None,
+                "lineage": None
+            }
         
         # Step 1: Extract intent
         print("Step 1: Extracting intent...")

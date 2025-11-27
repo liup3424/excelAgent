@@ -58,8 +58,27 @@ class CodeExecutor:
             # Get output
             output = captured_output.getvalue()
             
-            # Try to get result variable
-            result = self.execution_globals.get('result', None)
+            # Try to get result variable (check multiple possible variable names)
+            result = None
+            
+            # Priority order: result > df > data > any DataFrame variable
+            variable_names = ['result', 'df', 'data', 'output_df', 'final_result', 'analysis_result']
+            
+            for var_name in variable_names:
+                if var_name in self.execution_globals:
+                    var_value = self.execution_globals.get(var_name)
+                    if isinstance(var_value, pd.DataFrame) and not var_value.empty:
+                        result = var_value
+                        break
+            
+            # If still no result, check all variables for DataFrames
+            if result is None:
+                for var_name, var_value in self.execution_globals.items():
+                    # Skip built-ins and modules
+                    if not var_name.startswith('_') and isinstance(var_value, pd.DataFrame):
+                        if not var_value.empty:
+                            result = var_value
+                            break
             
             return {
                 "success": True,
